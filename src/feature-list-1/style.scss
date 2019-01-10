@@ -1,0 +1,108 @@
+.kenzap-featured-list-1 {
+  div, span,
+  h1, h2, h3, h4, h5, h6, p, blockquote,
+  a, del, dfn, img, ins, kbd, samp,
+  small, strike, sub, sup, tt, var,
+  center, dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend,
+  table, tbody, tfoot, thead, tr, th, td {
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    text-decoration: none;
+  }
+
+  // HTML5 display-role reset for older browsers
+  article, aside, details, figcaption, figure,
+  footer, header, hgroup, menu, nav, section {
+    display: block;
+  }
+
+  ol, ul {
+    list-style: none;
+  }
+
+  blockquote, q {
+    quotes: none;
+  }
+
+  blockquote:before, blockquote:after,
+  q:before, q:after {
+    content: '';
+    content: none;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+}
+
+.kenzap-featured-list-1{
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.kenzap-featured-list-1 .featured-box{
+  width:33.33333%;
+  float:left;
+  text-align:center;
+  padding:60px 0;
+  transition: all 400ms ease-in-out;
+}
+
+.kenzap-featured-list-1 .featured-box:nth-child(odd){
+  background:#fff;
+}
+
+.kenzap-featured-list-1 .featured-box:nth-child(even){
+  background:#f7f7f7;
+}
+
+.kenzap-featured-list-1 .featured-box img{
+  margin:0 auto 40px;
+}
+
+.kenzap-featured-list-1 .featured-box h3{
+  font-size:32px;
+  margin:0 0 15px;
+  line-height:38px;
+  text-transform:uppercase;
+  transition: all 400ms ease-in-out;
+  color: var(--tcolor, #111);
+}
+
+.kenzap-featured-list-1 .featured-box ul{
+  padding:0;
+  margin:0;
+  list-style:none
+}
+
+.kenzap-featured-list-1 .featured-box ul li{
+  font-size: inherit;
+  text-transform:uppercase;
+  padding: 7px 20px;
+  letter-spacing:.2em;
+  line-height:1.4;
+  transition: all 400ms ease-in-out;
+  color: var(--dColor);
+}
+
+@media screen and (max-width: 61.938em) {
+  .kenzap-featured-list-1 .featured-box{
+    width:100%;
+  }
+}
+
+.kenzap-featured-list-1.hover-enabled .featured-box:hover {
+  background: var(--backgroundHover);
+}
+
+.kenzap-featured-list-1.hover-enabled .featured-box:hover h3 {
+  color: var(--thover);
+}
+
+.kenzap-featured-list-1.hover-enabled .featured-box:hover ul li {
+  color: var(--dhover);
+}
