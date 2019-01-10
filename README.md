@@ -1,10 +1,10 @@
-# Team Members Gutenberg Blocks
+# Features Gutenberg Blocks
 
 Create beautiful features section on your website. 
 To be used with WordPress Gutenberg.
 
 
-![Create beatiful team members section with Gutenberg](https://kenzap.com/website/img/feature-2.png)
+![Create beatiful features section with Gutenberg](https://kenzap.com/website/img/feature-2.png)
 
 <b>Block is easy customizable:</b>
 
