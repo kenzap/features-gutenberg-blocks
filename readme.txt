@@ -1,9 +1,9 @@
 Kenzap Features
 Contributors: kenzap
 Tags: features, info, services, about
-Requires at least: 5.0
-Tested up to: 5.1
-Stable tag: 1.0.0
+Requires at least: 5.1
+Tested up to: 5.2
+Stable tag: 1.1.1
 Donate link: https://kenzap.com/wordpress-plugin-donation-page/
 Requires PHP: 5.6
 License: GPL2+
@@ -87,3 +87,10 @@ src/feature-list-2/edit.js
 
 = v1.0.0 =
 New: Initial release
+
+= v1.1.0 =
+New: Typography settings introduced
+Update: More settings available under Background and Container panes 
+
+= v1.1.1 =
+Update: vulnerability update
