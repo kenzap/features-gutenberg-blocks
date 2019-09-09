@@ -86,7 +86,7 @@ function kenzap_feature_list_editor_assets() {
 		wp_set_script_translations( 'kenzap-features-editor', 'kenzap-features', KENZAP_FEATURES . '/languages/' );
 	}
 
-	$pathToPlugin = plugins_url( 'src/', dirname( __FILE__ ) );
+	$pathToPlugin = plugins_url( 'dist/', dirname( __FILE__ ) );
     wp_add_inline_script( 'wp-blocks', 'var kenzap_features_gutenberg_path = "' .wp_parse_url($pathToPlugin)['path'].'"', 'before');
 } // End function kenzap_feature_list_cgb_editor_assets().
 

@@ -11,11 +11,18 @@
 .kenzap .kenzap-featured-list-3 .kenzap-container{
   max-width:1170px;
   margin:0 auto;
+  padding:0 var(--paddings2,0);
+  overflow-x: hidden;
+}
+
+.kenzap .kenzap-featured-list-3.autoPadding {
+  padding: calc(30px + (var(--paddings) - 30) * ((100vw - 300px) / (1600 - 300))) 0;
 }
 
 .kenzap .kenzap-featured-list-3 .kenzap-row{
   display: flex;
   flex-wrap: wrap;
+  margin: 0 -15px;
 }
 
 .kenzap .kenzap-featured-list-3 .kenzap-col-3{
@@ -23,7 +30,7 @@
 }
 
 .kenzap .kenzap-featured-list-3 .featured-box{
-  margin:30px 0 0;
+  margin:20px 0 20px;
   text-align:center;
   padding:0 15px;
   display:flex;
@@ -44,19 +51,12 @@
 }
 
 .kenzap .kenzap-featured-list-3 .featured-box h3{
-  margin: 0 0 12px;
-  font-size: 18px;
-  line-height:18px;
-  color:#333;
-  font-weight:600;
-  text-transform:uppercase
+  margin: 0;
+  width: 100%;
 }
 
 .kenzap .kenzap-featured-list-3 .featured-box p{
-  margin: 0 0 15px;
-  font-size:15px;
-  line-height:27px;
-  color:#666;
+  margin: 0;
   hyphens:none;
 }
 

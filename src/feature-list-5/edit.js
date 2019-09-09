@@ -1,7 +1,7 @@
 const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { MediaUpload, RichText, InspectorControls, InnerBlocks } = wp.editor;
-const { RangeControl, PanelBody } = wp.components;
+const { RangeControl, PanelBody, CheckboxControl } = wp.components;
 import { ContainerEdit, InspectorContainer } from '../commonComponents/container/container';
 import { defaultItem, typographyArr, getStyles } from './block';
 import { TypographyContainer, getTypography } from '../commonComponents/typography/typography';
@@ -76,10 +76,8 @@ export default class Edit extends Component {
         } = this.props;
 
         const {
-            featuredImg,
             vars,
             kenzapContanerStyles,
-            additionalClassForKenzapContainer,
         } = getStyles( attributes );
 
         return (
@@ -93,8 +91,19 @@ export default class Edit extends Component {
                             label={ __( 'Icons size', 'kenzap-features' ) }
                             value={ attributes.iconSize }
                             onChange={ ( iconSize ) => setAttributes( { iconSize } ) }
-                            min={ 50 }
-                            max={ 140 }
+                            min={ 25 }
+                            max={ 50 }
+                        />
+
+                        <CheckboxControl
+                            label={ __( 'Text visible', 'kenzap-features' ) }
+                            checked={ attributes.vid }
+                            onChange={ ( value ) => {
+                                setAttributes( {
+                                    vis: value,
+                                } );
+                            } }
+                            help={ __( 'Make paragraph block always visible on frontend.', 'kenzap-features' ) }
                         />
                         
                     </PanelBody>
@@ -116,92 +125,71 @@ export default class Edit extends Component {
 
                 <div className={ `kenzap ${ className ? className : '' }` }>
                     <ContainerEdit
-                        className={ `kenzap-featured-list-3 ${ isSelected ? 'selected' : '' } ` }
+                        className={ `kp-featured-1 ${ isSelected ? 'selected' : '' } ` }
                         style={ { ...vars } }
                         attributes={ attributes }
                         withBackground
                         withPadding
                     >
-                        <div className={ `kenzap-container ${ additionalClassForKenzapContainer }` } style={ kenzapContanerStyles }>
+                        <div className={ `kenzap-container` } style={ kenzapContanerStyles }>
                             { attributes.nestedBlocks == 'top' && <InnerBlocks /> }
-                            <div className="kenzap-row">
+                            <div className="kp-content">
                                 { attributes.items && attributes.items.map( ( item, index ) => (
-                                    <div
+
+                                    <div 
                                         key={ item.key }
-                                        className="kenzap-col-3"
-                                    >
-                                        <div className="featured-box">
-                                            <button
-                                                className="remove" onClick={ () => this.removeItem( index ) }>
-                                                <i className="dashicons dashicons-no" />
-                                            </button>
-                                            { item.iconMediaUrl ? (
-                                                <MediaUpload
-                                                    onSelect={ ( media ) => {
-                                                            this.onChangePropertyItem( 'iconMediaId', media.id, index );
-                                                            this.onChangePropertyItem( 'iconMediaUrl', media.url, index, true );
-                                                        } }
-                                                    value={ item.iconMediaId }
-                                                    //allowedTypes={ [ 'image', 'image/svg+xml' ] }
-                                                    render={ ( props ) => (
-                                                        <img
-                                                            src={ (item.iconMediaUrl) }
-                                                            alt={ item.title.replace( /<(?:.|\n)*?>/gm, '' ) }
-                                                            style={ {
-                                                                    ...featuredImg,
-                                                                    cursor: 'pointer',
-                                                                    position: 'relative',
-                                                                    zIndex: 10,
-                                                                } }
-                                                            onClick={ props.open }
-                                                            role="presentation"
-                                                            />
-                                                        ) }
-                                                    />
-                                                ) : (
+                                        className="kp-box">
+                                        <button
+                                            className="remove" onClick={ () => this.removeItem( index ) }>
+                                            <i className="dashicons dashicons-no" />
+                                        </button>
+                                        <div className="kp-wrapper">
+                                            <MediaUpload
+                                                onSelect={ ( media ) => {
+                                                        this.onChangePropertyItem( 'iconMediaId', media.id, index );
+                                                        this.onChangePropertyItem( 'iconMediaUrl', media.url, index, true );
+                                                    } }
+                                                value={ item.iconMediaId }
+                                                render={ ( props ) => (
                                                     <div
-                                                        className="addIcon"
+                                                        className="kp-img"
                                                         style={ {
-                                                            width: '150px',
-                                                            height: '60px',
+                                                            cursor: 'pointer',
                                                             position: 'relative',
                                                             zIndex: 10,
+                                                            width: attributes.iconSize,
+                                                            height: attributes.iconSize,
+                                                            "--icon":"url(" + item.iconMediaUrl + ")",
                                                         } }
-                                                    >
-                                                        <MediaUpload
-                                                            onSelect={ ( media ) => {
-                                                                this.onChangePropertyItem( 'iconMediaId', media.id, index );
-                                                                this.onChangePropertyItem( 'iconMediaUrl', media.url, index, true );
-                                                            } }
-                                                            value={ item.iconMediaId }
-                                                            //allowedTypes={ [ 'image', 'image/svg+xml' ] }
-                                                            render={ ( props ) => (
-                                                                <button onClick={ props.open }>
-                                                                    { __( 'Upload/Choose icon', 'kenzap-features' ) }
-                                                                </button>
-                                                            ) }
-                                                        />
-                                                    </div>
+                                                        onClick={ props.open }
+                                                        role="presentation" />
                                                 ) }
+                                            />
+
                                             <RichText
                                                 tagName="h3"
+                                                className="kp-a"
                                                 placeholder={ __( 'Title', 'kenzap-features' ) }
                                                 value={ item.title }
-                                                onChange={ ( value ) => this.onChangePropertyItem( 'title', value, index ) }
-                                                style={ getTypography( attributes, 0 ) }
+                                                onChange={ ( value ) => this.onChangePropertyItem( 'title', value, index, true ) }
+                                                style={ { ...getTypography( attributes, 0 ) } }
                                             />
+
                                             <RichText
                                                 tagName="p"
                                                 placeholder={ __( 'Description', 'kenzap-features' ) }
                                                 value={ item.description }
-                                                onChange={ ( value ) => this.onChangePropertyItem( 'description', value, index ) }
+                                                onChange={ ( value ) => this.onChangePropertyItem( 'description', value, index, true ) }
                                                 style={ getTypography( attributes, 1 ) }
                                             />
+
                                         </div>
                                     </div>
+
                                 ) ) }
                                 <div style={ { clear: 'both' } } />
                             </div>
+
                             { attributes.nestedBlocks == 'bottom' && <InnerBlocks /> }
                         </div>
                         <div className="editPadding"/> 

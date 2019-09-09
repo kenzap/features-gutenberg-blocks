@@ -15,15 +15,16 @@ import { getTypography } from '../commonComponents/typography/typography';
 export const defaultItem = {
     title: __( 'New feature', 'kenzap-features' ),
     iconMediaId: '',
-    iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-1.png'),
-    description: __( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus leo sit amet.', 'kenzap-features' ),
+    iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/icon-1.svg'),
+    description: __( 'There are many variations of passages of Lorem Ipsum available, but the.', 'kenzap-features' ),
 };
 
 export const defaultSubBlocks = JSON.stringify( [
-    { ...defaultItem, title: __( 'PURE DRINK', 'kenzap-features' ), key: 'default1', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-1.png') },
-    { ...defaultItem, title: __( 'PURE AIR', 'kenzap-features' ), key: 'default2', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-2.png') },
-    { ...defaultItem, title: __( 'EXQUISITE SPACE', 'kenzap-features' ), key: 'default3', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-3.png') },
-    { ...defaultItem, title: __( 'HANDY MATERIAL', 'kenzap-features' ), key: 'default4', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-4.png') },
+    { ...defaultItem, title: __( 'PURE DRINK', 'kenzap-features' ), key: 'default1', iconMediaId: '', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-1.png') },
+    { ...defaultItem, title: __( 'PURE AIR', 'kenzap-features' ), key: 'default2', iconMediaId: '', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-2.png') },
+    { ...defaultItem, title: __( 'EXQUISITE SPACE', 'kenzap-features' ), key: 'default3', iconMediaId: '', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-3.png') },
+    { ...defaultItem, title: __( 'HANDY MATERIAL', 'kenzap-features' ), key: 'default4', iconMediaId: '', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-4.png') },
+    { ...defaultItem, key: 'default4', iconMediaId: '', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/relax-flusi-img.png') },
 ] );
 
 /**
@@ -83,17 +84,18 @@ export const getStyles = attributes => {
  */
 export const typographyArr = JSON.stringify([
     {
-        'title': __( '- Title', 'kenzap-steps' ),
+        'title': __( '- Title', 'kenzap-features' ),
         'font-size': 20,
         'font-weight': 6,
-        'line-height': 36,
+        'line-height': 38,
+        'margin-top': 14,
         'margin-bottom': 12,
         'color': '#333333',
     },
     {
-        'title': __( '- Description', 'kenzap-steps' ),
+        'title': __( '- Description', 'kenzap-features' ),
         'text-align':'',
-        'font-size': 15,
+        'font-size': 16,
         'font-weight': 4,
         'line-height': 25,
         'margin-bottom': 15,
@@ -114,12 +116,14 @@ export const typographyArr = JSON.stringify([
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'kenzap/feature-list-3-1', {
-    title: __( 'Features List 3', 'kenzap-features' ),
+registerBlockType( 'kenzap/feature-list-4', {
+    title: __( 'Features List 4', 'kenzap-features' ),
     icon: 'yes',
     category: 'layout',
     keywords: [
-        __( 'feature', 'kenzap-features' ),
+        __( 'features 4', 'kenzap-features' ),
+        __( 'product', 'kenzap-features' ),
+        __( 'info block', 'kenzap-features' ),
     ],
     anchor: true,
     html: true,
@@ -131,7 +135,7 @@ registerBlockType( 'kenzap/feature-list-3-1', {
 
         iconSize: {
             type: 'number',
-            default: 80,
+            default: 90,
         },
 
         items: {
@@ -189,51 +193,74 @@ registerBlockType( 'kenzap/feature-list-3-1', {
         } = props;
 
         const {
-            featuredImg,
             vars,
             kenzapContanerStyles,
             additionalClassForKenzapContainer,
         } = getStyles( attributes );
 
+        const getIcon = (cl, index) => {
+            return(
+                <div className={ cl }>
+                    <span 
+                        className="kp-icon" 
+                        style={ {width: attributes.iconSize, height: attributes.iconSize } }
+                        >
+
+                        <img 
+                            src={ attributes.items[index].iconMediaUrl }
+                            alt={ attributes.items[index].title.replace( /<(?:.|\n)*?>/gm, '' ) } />
+                    </span>
+
+                    <RichText.Content
+                        tagName="h3"
+                        value={ attributes.items[index].title }
+                        style={ getTypography( attributes, 0 ) }
+                        />
+
+                    <RichText.Content
+                        tagName="p"
+                        value={ attributes.items[index].description }
+                        style={ getTypography( attributes, 1 ) }
+                        />
+                </div>
+            );
+        };
+
         return (
             <div className={ `kenzap ${ className ? className : '' }` }>
                 <ContainerSave
-                    className={ `kenzap-featured-list-3 block-${ attributes.blockUniqId }` }
+                    className={ `kp-iconbox-3 block-${ attributes.blockUniqId }` }
                     attributes={ attributes }
                     style={ vars }
                     withBackground
                     withPadding
                 >
                     <div className={ `kenzap-container ${ additionalClassForKenzapContainer }` } style={ kenzapContanerStyles }>
-                        { attributes.nestedBlocks == 'top' && <InnerBlocks.Content /> }
-                        <div className="kenzap-row">
-                            { attributes.items && attributes.items.map( item => (
-                                <div
-                                    key={ item.key }
-                                    className="kenzap-col-3"
-                                >
-                                    <div className="featured-box">
-                                        <img
-                                            src={ (item.iconMediaUrl) }
-                                            alt={ item.title.replace( /<(?:.|\n)*?>/gm, '' ) }
-                                            style={ featuredImg }
-                                        />
-                                        <RichText.Content
-                                            tagName="h3"
-                                            value={ item.title }
-                                            style={ getTypography( attributes, 0 ) }
-                                        />
-                                        <RichText.Content
-                                            tagName="p"
-                                            value={ item.description }
-                                            style={ getTypography( attributes, 1 ) }
-                                        />
-                                    </div>
-                                </div>
-                            ) ) }
+                        { attributes.nestedBlocks == 'top' && <InnerBlocks /> }
+                        <div className="kp-row">
+                            <div className="kp-col-3">
+                                
+                                { getIcon("kp-box align-right", 0) }
+
+                                { getIcon("kp-box align-right", 1) }
+
+                            </div>
+                            <div class="kp-col-6">
+                                <img 
+                                    src={ attributes.items[4].iconMediaUrl }
+                                    alt={ attributes.items[4].title.replace( /<(?:.|\n)*?>/gm, '' ) } />
+                            </div>
+                            <div class="kp-col-3">
+
+                                { getIcon("kp-box", 2) }
+
+                                { getIcon("kp-box", 3) }
+
+                            </div>
                         </div>
-                        { attributes.nestedBlocks == 'bottom' && <InnerBlocks.Content /> }
+                        { attributes.nestedBlocks == 'bottom' && <InnerBlocks /> }
                     </div>
+
                 </ContainerSave>
             </div>
         );

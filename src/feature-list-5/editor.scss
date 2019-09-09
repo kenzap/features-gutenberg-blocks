@@ -1,34 +1,13 @@
-.kenzap .kenzap-featured-list-3 .kenzap-lg .kenzap-col-3,
-.kenzap .kenzap-featured-list-3 .kenzap-col-3{
-  position: relative;
+.kenzap .kp-featured-1 .kp-box .kp-wrapper p{
+  display: block;
 }
 
-@media screen and (max-width: 61.938em) {
-  .kenzap .kenzap-featured-list-3 .kenzap-col-3{
-    width:50%;
-  }
+.kenzap .kp-featured-1 .kp-wrapper:hover {
+  position: relative!important;
+  z-index: 1!important;
 }
 
-@media screen and (max-width: 61.938em) {
-  .kenzap .kenzap-featured-list-3 .kenzap-md .kenzap-col-3{
-    width:50%;
-  }
-}
-
-@media screen and (max-width: 48em) {
-  .kenzap .kenzap-featured-list-3 .kenzap-col-3{
-    width:100%;
-  }
-}
-
-@media screen and (min-width: 48em) {
-  .kenzap .kenzap-featured-list-3 .kenzap-sm .kenzap-col-3,
-  .kenzap .kenzap-featured-list-3 .kenzap-xs .kenzap-col-3{
-    width:100%;
-  }
-}
-
-.kenzap .kenzap-featured-list-3 .remove {
+.kenzap .kp-featured-1 .remove {
   position: absolute;
   top: 0;
   right: 0;
@@ -55,11 +34,11 @@
   }
 }
 
-.kenzap .kenzap-featured-list-3 .featured-box:hover .remove{
+.kenzap .kp-featured-1 .featured-box:hover .remove{
   opacity: 1;
 }
 
-.kenzap .kenzap-featured-list-3 .kenzap-add {
+.kenzap .kp-featured-1 .kenzap-add {
 	position: absolute;
 	display: none;
 	bottom: 20px;
@@ -93,11 +72,11 @@
   }
 }
 
-.kenzap .kenzap-featured-list-3 .editPadding {
+.kenzap .kp-featured-1 .editPadding {
 	transition: all .2s;
 }
 
-.kenzap .is-selected .kenzap-featured-list-3{
+.kenzap .is-selected .kp-featured-1{
   
 	& .kenzap-add {
     display: flex;

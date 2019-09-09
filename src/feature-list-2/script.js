@@ -4,6 +4,7 @@ jQuery(document).ready(function(){
     }
     setTimeout(function() {
 
+
         jQuery(".kenzap-featured-list-2 .owl-carousel").owlCarousel({
             autoplay: false,
             margin: 10,
@@ -22,5 +23,7 @@ jQuery(document).ready(function(){
                 }
             }
         });
+
+        jQuery(".owl-load").removeClass(".owl-load");
     });
 });

@@ -1,15 +1,11 @@
-/**
- * BLOCK: kenzap-feature-1
- */
-
-//  Import CSS.
 import './style.scss';
 import './editor.scss';
 
 const { __ } = wp.i18n;
+const { Fragment } = wp.element;
 const { registerBlockType } = wp.blocks;
-const { RichText } = wp.editor;
-
+const { RichText, InnerBlocks } = wp.editor;
+import { getTypography } from '../commonComponents/typography/typography';
 import Edit from './edit';
 
 /**
@@ -19,7 +15,7 @@ import Edit from './edit';
 export const defaultItem = {
     title: __( 'New feature' ),
     iconMediaId: '',
-    iconMediaUrl: window.kenzap_features_gutenberg_path + 'feature-list-1/img/featured-1.svg',
+    iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-1-2.svg'),
     description: '' +
     '<li>' + __( 'FULLY CUSTOMIZABLE', 'kenzap-features' ) + '</li>' +
     '<li>' + __( 'POWERFUL THEME OPTIONS', 'kenzap-features' ) + '</li>' +
@@ -27,12 +23,16 @@ export const defaultItem = {
     '<li>' + __( 'ELITE ADDONS', 'kenzap-features' ) + '</li>' +
     '<li>' + __( 'SLIDER REVOLUTION', 'kenzap-features' ) + '</li>' +
     '<li>' + __( 'FRIENDLY SUPPORT', 'kenzap-features' ) + '</li>',
+    alt: 'image',
+    link: '#',
+    linkn: false,
+    btn: 'Get Details',
 };
 
 export const defaultSubBlocks = JSON.stringify( [
-    { ...defaultItem, title: __( 'EASY-TO-USE', 'kenzap-features' ), key: 'default1', iconMediaUrl: window.kenzap_features_gutenberg_path + 'feature-list-1/img/featured-1.svg' },
-    { ...defaultItem, title: __( 'WOOCOMMERCE', 'kenzap-features' ), key: 'default2', iconMediaUrl: window.kenzap_features_gutenberg_path + 'feature-list-1/img/featured-2.svg' },
-    { ...defaultItem, title: __( 'SUPPORT', 'kenzap-features' ), key: 'default3', iconMediaUrl: window.kenzap_features_gutenberg_path + 'feature-list-1/img/featured-3.svg' },
+    { ...defaultItem, title: __( 'EASY-TO-USE', 'kenzap-features' ), key: 'default1', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-1-2.svg') },
+    { ...defaultItem, title: __( 'WOOCOMMERCE', 'kenzap-features' ), key: 'default2', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-2-2.svg') },
+    { ...defaultItem, title: __( 'SUPPORT', 'kenzap-features' ), key: 'default3', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-3-2.svg') },
 ] );
 
 /**
@@ -56,6 +56,8 @@ export const getStyles = attributes => {
     };
 
     const container = {
+        '--icolor': attributes.iconColor,
+        '--ihover': attributes.iconColorOnHover,
         '--tcolor': attributes.titleColor,
         '--thover': attributes.titleColorOnHover,
         '--dcolor': attributes.descriptionColor,
@@ -72,6 +74,44 @@ export const getStyles = attributes => {
 };
 
 /**
+ * Define typography defaults
+ */
+export const typographyArr = JSON.stringify([
+    {
+        'title': __( '- Title', 'kenzap-steps' ),
+        'font-size': 26,
+        'font-weight': 6,
+        'line-height': 32,
+        'margin-top': 20,
+        'margin-bottom': 15,
+        'color': '#333333',
+    },
+    {
+        'title': __( '- Description', 'kenzap-steps' ),
+        'text-align':'',
+        'font-size': 15,
+        'font-weight': 4,
+        'color': '#333333',
+    },
+    {
+        'title': __( '- Button', 'kenzap-cta' ),
+        'type': 'button',
+        'font-size': 16,
+        'font-weight': 4,
+        'line-height': 30,
+        'margin-top': 24,
+        'padding-top': 12,
+        'padding-right': 48,
+        'padding-bottom': 12,
+        'padding-left': 48,
+        'color': '#ffffff',
+        'background-color': '#000000',
+        'hover-color': '#000000',
+        'hover-background-color': '#ffffff'
+    },
+]);
+
+/**
  * Register: a Gutenberg Block.
  *
  * Registers a new block provided a unique name and an object defining its
@@ -85,7 +125,7 @@ export const getStyles = attributes => {
  *                             registered; otherwise `undefined`.
  */
 registerBlockType( 'kenzap/feature-list-1', {
-    title: __( 'Kenzap Feature List 1', 'kenzap-features' ),
+    title: __( 'Features List 1', 'kenzap-features' ),
     icon: 'yes',
     category: 'layout',
     keywords: [
@@ -95,10 +135,23 @@ registerBlockType( 'kenzap/feature-list-1', {
     ],
     anchor: true,
     html: true,
+    supports: {
+        align: [ 'full', 'wide' ],
+    },
     attributes: {
+        align: {
+            type: 'string',
+            default: 'full',
+        },
+
         iconSize: {
             type: 'number',
             default: 40,
+        },
+
+        iconColor: {
+            type: 'string',
+            default: '#ff0000',
         },
 
         titleSize: {
@@ -121,14 +174,29 @@ registerBlockType( 'kenzap/feature-list-1', {
             default: '#555',
         },
 
+        cta: {
+            type: 'boolean',
+            default: false,
+        },
+
         isHoverEnabled: {
-            type: 'bool',
+            type: 'boolean',
+            default: true,
+        },
+
+        oic: {
+            type: 'boolean',
             default: true,
         },
 
         backgroundColorOnHover: {
             type: 'string',
             default: '#1c1c1c',
+        },
+
+        iconColorOnHover: {
+            type: 'string',
+            default: '#fff',
         },
 
         titleColorOnHover: {
@@ -146,6 +214,11 @@ registerBlockType( 'kenzap/feature-list-1', {
             default: [],
         },
 
+        typography: {
+            type: 'array',
+            default: [],
+        },
+        
         isFirstLoad: {
             type: 'boolean',
             default: true,
@@ -163,7 +236,7 @@ registerBlockType( 'kenzap/feature-list-1', {
                 items: [ ...JSON.parse( defaultSubBlocks ) ],
                 isFirstLoad: false,
             } );
-            // TODO It is very bad solution to avoid low speed working of setAttributes function
+
             props.attributes.items = JSON.parse( defaultSubBlocks );
 
             if ( ! props.attributes.blockUniqId ) {
@@ -192,8 +265,6 @@ registerBlockType( 'kenzap/feature-list-1', {
 
         const {
             featuredImg,
-            title,
-            description,
             container,
         } = getStyles( attributes );
 
@@ -202,6 +273,7 @@ registerBlockType( 'kenzap/feature-list-1', {
                 className={ `kenzap-featured-list-1 ${ attributes.isHoverEnabled ? 'hover-enabled' : '' } ${ className ? className : '' }` }
                 style={ container }
             >
+                { attributes.nestedBlocks == 'top' && <InnerBlocks.Content /> }
                 { attributes.items && attributes.items.map( item => (
                     <div
                         key={ item.key }
@@ -209,26 +281,47 @@ registerBlockType( 'kenzap/feature-list-1', {
                     >
                         <div className="featured-img">
                             { item.iconMediaUrl &&
-                                <img
-                                    src={ item.iconMediaUrl }
-                                    alt={ item.title.replace( /<(?:.|\n)*?>/gm, '' ) }
-                                    style={ featuredImg }
-                                />
+
+                                !attributes.oic ? 
+                                ( <div
+                                    className="kp-img"
+                                    style={ {
+                                        cursor: 'pointer',
+                                        position: 'relative',
+                                        zIndex: 10,
+                                        //width: attributes.iconSize,
+                                        height: attributes.iconSize,
+                                        "--icon":"url(" + item.iconMediaUrl + ")",
+                                    } }
+                                    />
+                                ):( <img
+                                        src={ (item.iconMediaUrl) }
+                                        alt={ item.title.replace( /<(?:.|\n)*?>/gm, '' ) }
+                                        style={ { ...featuredImg, cursor: 'pointer' } }
+                                /> )
                             }
 
                         </div>
                         <RichText.Content
                             tagName="h3"
                             value={ item.title }
-                            style={ title }
+                            style={ getTypography( attributes, 0 ) }
                         />
                         <RichText.Content
                             tagName="ul"
                             value={ item.description }
-                            style={ description }
+                            style={ getTypography( attributes, 1 ) }
                         />
+                        { item.btn && attributes.cta && <a 
+                            target={ item.linkn ? '_blank':'_self' }
+                            className="bt1"
+                            style={ getTypography( attributes, 2 ) }
+                            rel="noopener noreferrer"
+                            href={ item.link } >{ item.btn }</a> 
+                        }
                     </div>
                 ) ) }
+                { attributes.nestedBlocks == 'bottom' && <InnerBlocks.Content /> }
             </div>
         );
     },

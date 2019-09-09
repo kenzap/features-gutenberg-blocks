@@ -12,3 +12,5 @@
 import './feature-list-1/block.js';
 import './feature-list-2/block.js';
 import './feature-list-3/block.js';
+import './feature-list-4/block.js';
+import './feature-list-5/block.js';

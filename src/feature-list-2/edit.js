@@ -1,10 +1,10 @@
-const { __ } = wp.i18n; // Import __() from wp.i18n
+const { __ } = wp.i18n;
 const { Component } = wp.element;
-const { MediaUpload, RichText, InspectorControls, PanelColorSettings } = wp.editor;
+const { MediaUpload, RichText, InspectorControls, PanelColorSettings, InnerBlocks } = wp.editor;
 const { RangeControl, PanelBody } = wp.components;
-
-import { defaultItem, getStyles } from './block';
+import { defaultItem, typographyArr, getStyles } from './block';
 import { InspectorContainer, ContainerEdit } from '../commonComponents/container/container';
+import { TypographyContainer, getTypography } from '../commonComponents/typography/typography';
 import { Plus } from '../commonComponents/icons/plus';
 
 /**
@@ -102,33 +102,13 @@ export default class Edit extends Component {
                         initialOpen={ false }
                     >
                         <RangeControl
-                            label={ __( 'Main title size', 'kenzap-features' ) }
-                            value={ attributes.mainTitleSize }
-                            onChange={ ( mainTitleSize ) => setAttributes( { mainTitleSize } ) }
-                            min={ 20 }
-                            max={ 130 }
-                        />
-                        <RangeControl
                             label={ __( 'Icons size', 'kenzap-features' ) }
                             value={ attributes.iconSize }
                             onChange={ ( iconSize ) => setAttributes( { iconSize } ) }
                             min={ 50 }
                             max={ 130 }
                         />
-                        <RangeControl
-                            label={ __( 'Title size', 'kenzap-features' ) }
-                            value={ attributes.titleSize }
-                            onChange={ ( titleSize ) => setAttributes( { titleSize } ) }
-                            min={ 10 }
-                            max={ 40 }
-                        />
-                        <RangeControl
-                            label={ __( 'Description size', 'kenzap-features' ) }
-                            value={ attributes.descriptionSize }
-                            onChange={ ( descriptionSize ) => setAttributes( { descriptionSize } ) }
-                            min={ 10 }
-                            max={ 30 }
-                        />
+
                         <PanelColorSettings
                             title={ __( 'Colors' ) }
                             initialOpen={ false }
@@ -157,6 +137,13 @@ export default class Edit extends Component {
                             ] }
                         />
                     </PanelBody>
+
+                    <TypographyContainer
+                        setAttributes={ setAttributes }
+                        typographyArr={ typographyArr }
+                        { ...attributes }
+                    />
+
                     <InspectorContainer
                         setAttributes={ setAttributes }
                         { ...attributes }
@@ -176,18 +163,16 @@ export default class Edit extends Component {
                         withPadding
                     >
                         <div className="kenzap-container" style={ kenzapContanerStyles }>
-
+                            { attributes.nestedBlocks == 'top' && <InnerBlocks /> }
                             <RichText
                                 tagName="h2"
                                 placeholder={ __( 'Title', 'kenzap-features' ) }
                                 value={ attributes.mainTitle }
-                                style={ {
-                                    color: attributes.mainTitleColor,
-                                    lineHeight: 1.4,
-                                } }
+                                style={ getTypography( attributes, 0 ) }
                                 onChange={ ( value ) => setAttributes( { mainTitle: value } ) }
                                 onSplit={ () => null }
                             />
+
                             <div className="owl-carousel">
                                 { attributes.items && attributes.items.map( ( item, index ) => (
                                     <div
@@ -197,7 +182,7 @@ export default class Edit extends Component {
                                         onClick={ () => this.setActiveSubBlock( index ) }
                                     >
                                         <button className="remove" onClick={ () => this.removeItem( index ) }>
-                                            <span className="dashicons dashicons-no" />
+                                            <i className="dashicons dashicons-no" />
                                         </button>
 
                                         { item.iconMediaUrl ? (
@@ -207,10 +192,10 @@ export default class Edit extends Component {
                                                     this.onChangePropertyItem( 'iconMediaUrl', media.url, index, true );
                                                 } }
                                                 value={ item.iconMediaId }
-                                                allowedTypes={ [ 'image', 'image/svg+xml' ] }
+                                                //allowedTypes={ [ 'image', 'image/svg+xml' ] }
                                                 render={ ( props ) => (
                                                     <img
-                                                        src={ item.iconMediaUrl }
+                                                        src={ (item.iconMediaUrl) }
                                                         alt={ item.title.replace( /<(?:.|\n)*?>/gm, '' ) }
                                                         style={ {
                                                             height: `${ attributes.iconSize }px`,
@@ -235,7 +220,7 @@ export default class Edit extends Component {
                                                         this.onChangePropertyItem( 'iconMediaUrl', media.url, index, true );
                                                     } }
                                                     value={ item.iconMediaId }
-                                                    allowedTypes={ [ 'image', 'image/svg+xml' ] }
+                                                    //allowedTypes={ [ 'image', 'image/svg+xml' ] }
                                                     render={ ( props ) => (
                                                         <button onClick={ props.open }>
                                                             { __( 'Upload/Choose icon', 'kenzap-features' ) }
@@ -250,22 +235,20 @@ export default class Edit extends Component {
                                             placeholder={ __( 'Title', 'kenzap-features' ) }
                                             value={ item.title }
                                             onChange={ ( value ) => this.onChangePropertyItem( 'title', value, index, true ) }
-                                            style={ {
-                                                color: attributes.titleColor,
-                                            } }
+                                            style={ getTypography( attributes, 1 ) }
                                         />
+                                        
                                         <RichText
                                             tagName="p"
                                             placeholder={ __( 'Description', 'kenzap-features' ) }
                                             value={ item.description }
                                             onChange={ ( value ) => this.onChangePropertyItem( 'description', value, index, true ) }
-                                            style={ {
-                                                color: attributes.descriptionColor,
-                                            } }
+                                            style={ getTypography( attributes, 2 ) }
                                         />
                                     </div>
                                 ) ) }
                             </div>
+                            { attributes.nestedBlocks == 'bottom' && <InnerBlocks /> }
                         </div>
                         <div className="editPadding"/> 
                         <button className="kenzap-add" onClick={ this.addItem }>

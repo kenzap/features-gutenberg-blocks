@@ -1,17 +1,11 @@
-/**
- * BLOCK: kenzap-feature-2
- *
- */
-
-//  Import CSS.
 import './style.scss';
 import './editor.scss';
 
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { RichText } = wp.editor;
-
+const { RichText, InnerBlocks } = wp.editor;
 import { blockProps, ContainerSave } from '../commonComponents/container/container';
+import { getTypography } from '../commonComponents/typography/typography';
 import Edit from './edit';
 
 /**
@@ -21,14 +15,14 @@ import Edit from './edit';
 export const defaultItem = {
     title: __( 'New feature', 'kenzap-features' ),
     iconMediaId: '',
-    iconMediaUrl: window.kenzap_features_gutenberg_path + 'feature-list-2/img/featured-1.svg',
+    iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-1.svg'),
     description: __( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam semper lacus at massa ultricies auctor. Integer sodales commodo', 'kenzap-features' ),
 };
 
 export const defaultSubBlocks = JSON.stringify( [
-    { ...defaultItem, title: __( 'New Feature 1', 'kenzap-features' ), key: 'default1', iconMediaUrl: window.kenzap_features_gutenberg_path + 'feature-list-2/img/featured-1.svg' },
-    { ...defaultItem, title: __( 'New Feature 2', 'kenzap-features' ), key: 'default2', iconMediaUrl: window.kenzap_features_gutenberg_path + 'feature-list-2/img/featured-2.svg' },
-    { ...defaultItem, title: __( 'New Feature 3', 'kenzap-features' ), key: 'default3', iconMediaUrl: window.kenzap_features_gutenberg_path + 'feature-list-2/img/featured-3.svg' },
+    { ...defaultItem, title: __( 'New Feature 1', 'kenzap-features' ), key: 'default1', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-1.svg') },
+    { ...defaultItem, title: __( 'New Feature 2', 'kenzap-features' ), key: 'default2', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-2.svg') },
+    { ...defaultItem, title: __( 'New Feature 3', 'kenzap-features' ), key: 'default3', iconMediaUrl: (window.kenzap_features_gutenberg_path + 'img/featured-3.svg') },
 ] );
 
 /**
@@ -40,24 +34,10 @@ export const getStyles = attributes => {
 
     const varsTop = {
         '--paddings': `${ attributes.containerPadding }`,
-        '--paddingsMin': `${ attributes.containerPadding/4 }`,
-        '--paddingsMinPx': `${ attributes.containerPadding/4 }px`,
+        '--paddings2': `${ attributes.containerSidePadding }px`,
     };
 
-    const vars = {
-        '--h2': `${ attributes.mainTitleSize }px`,
-        '--h2v': `${ attributes.mainTitleSize }`,
-        '--h2lh': `${ attributes.mainTitleSize * 1.2 }px`,
-        '--h3': `${ attributes.titleSize }px`,
-        '--h3v': `${ attributes.titleSize }`,
-        '--h3lh': `${ attributes.titleSize * 1.4 }px`,
-        '--p': `${ attributes.descriptionSize }px`,
-        '--pv': `${ attributes.descriptionSize }`,
-        '--plh': `${ attributes.descriptionSize * 1.4 }px`,
-        '--paddings': `${ attributes.containerPadding }`,
-        '--paddingsMin': `${ attributes.containerPadding/4 }`,
-        '--paddingsMinPx': `${ attributes.containerPadding/4 }px`,
-    };
+    const vars = {};
 
     const kenzapContanerStyles = {
         maxWidth: `${ attributes.containerMaxWidth === '100%' ? '100%' : attributes.containerMaxWidth + 'px' }`,
@@ -71,6 +51,43 @@ export const getStyles = attributes => {
         kenzapContanerStyles,
     };
 };
+
+
+/**
+ * Define typography defaults
+ */
+export const typographyArr = JSON.stringify([
+    {
+        'title': __( '- Heading', 'kenzap-steps' ),
+        'type': 'title',
+        'font-size': 54,
+        'font-size-t': 50,
+        'font-size-m': 48,
+        'font-weight': 7,
+        'line-height': 64,
+        'margin-top': 40,
+        'margin-bottom': 80,
+        'color': '#ffffff',
+    },
+    {
+        'title': __( '- Title', 'kenzap-steps' ),
+        'text-align':'',
+        'font-size': 24,
+        'font-weight': 6,
+        'line-height': 25,
+        'margin-bottom': 20,
+        'color': '#ffffff',
+    },
+    {
+        'title': __( '- Description', 'kenzap-steps' ),
+        'text-align':'',
+        'font-size': 15,
+        'font-weight': 4,
+        'line-height': 23,
+        'margin-bottom': 20,
+        'color': '#ffffff',
+    },
+]);
 
 /**
  * Register: a Gutenberg Block.
@@ -86,7 +103,7 @@ export const getStyles = attributes => {
  *                             registered; otherwise `undefined`.
  */
 registerBlockType( 'kenzap/feature-list-2', {
-    title: __( 'Kenzap Feature List 2', 'kenzap-features' ),
+    title: __( 'Features List 2', 'kenzap-features' ),
     icon: 'yes',
     category: 'layout',
     keywords: [
@@ -94,9 +111,17 @@ registerBlockType( 'kenzap/feature-list-2', {
     ],
     anchor: true,
     html: true,
+    supports: {
+        align: [ 'full', 'wide' ],
+    },
     attributes: {
         ...blockProps,
-        // override from container
+
+        align: {
+            type: 'string',
+            default: 'full',
+        },
+
         containerPadding: {
             type: 'number',
             default: 58,
@@ -105,11 +130,6 @@ registerBlockType( 'kenzap/feature-list-2', {
         mainTitle: {
             type: 'string',
             default: __( 'Advantages of Your Business Here & Share it with Kenzap', 'kenzap-features' ),
-        },
-
-        mainTitleSize: {
-            type: 'number',
-            default: 30,
         },
 
         mainTitleColor: {
@@ -122,19 +142,9 @@ registerBlockType( 'kenzap/feature-list-2', {
             default: 40,
         },
 
-        titleSize: {
-            type: 'number',
-            default: 24,
-        },
-
         titleColor: {
             type: 'string',
             default: '#fff',
-        },
-
-        descriptionSize: {
-            type: 'number',
-            default: 16,
         },
 
         descriptionColor: {
@@ -143,6 +153,11 @@ registerBlockType( 'kenzap/feature-list-2', {
         },
 
         items: {
+            type: 'array',
+            default: [],
+        },
+        
+        typography: {
             type: 'array',
             default: [],
         },
@@ -159,12 +174,14 @@ registerBlockType( 'kenzap/feature-list-2', {
     },
 
     edit: ( props ) => {
+
         if ( props.attributes.items.length === 0 && props.attributes.isFirstLoad ) {
             props.setAttributes( {
                 items: [ ...JSON.parse( defaultSubBlocks ) ],
                 isFirstLoad: false,
+                backgroundColor: '#0693e3',
             } );
-            // TODO It is very bad solution to avoid low speed working of setAttributes function
+          
             props.attributes.items = JSON.parse( defaultSubBlocks );
             if ( ! props.attributes.blockUniqId ) {
                 props.setAttributes( {
@@ -202,21 +219,20 @@ registerBlockType( 'kenzap/feature-list-2', {
                     withPadding
                 >
                     <div className="kenzap-container" style={ kenzapContanerStyles }>
+                        { attributes.nestedBlocks == 'top' && <InnerBlocks.Content /> }
                         <RichText.Content
                             tagName="h2"
                             value={ attributes.mainTitle }
-                            style={ {
-                                color: attributes.mainTitleColor,
-                            } }
+                            style={ getTypography( attributes, 0 ) }
                         />
-                        <div className="owl-carousel">
+                        <div className="owl-carousel owl-load">
 
                             { attributes.items && attributes.items.map( item => (
                                 <div key={ item.key } className="featured-box">
                                     <div className="featured-img">
                                         { item.iconMediaUrl &&
                                         <img
-                                            src={ item.iconMediaUrl }
+                                            src={ (item.iconMediaUrl) }
                                             alt={ item.title.replace( /<(?:.|\n)*?>/gm, '' ) }
                                             style={ {
                                                 height: `${ attributes.iconSize }px`,
@@ -227,20 +243,17 @@ registerBlockType( 'kenzap/feature-list-2', {
                                     <RichText.Content
                                         tagName="h3"
                                         value={ item.title }
-                                        style={ {
-                                            color: attributes.titleColor,
-                                        } }
+                                        style={ getTypography( attributes, 1 ) }
                                     />
                                     <RichText.Content
                                         tagName="p"
                                         value={ item.description }
-                                        style={ {
-                                            color: attributes.descriptionColor,
-                                        } }
+                                        style={ getTypography( attributes, 2 ) }
                                     />
                                 </div>
                             ) ) }
                         </div>
+                        { attributes.nestedBlocks == 'bottom' && <InnerBlocks.Content /> }
                     </div>
                 </ContainerSave>
             </div>

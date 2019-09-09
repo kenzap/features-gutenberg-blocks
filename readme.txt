@@ -3,7 +3,7 @@ Contributors: kenzap
 Tags: features, info, services, about
 Requires at least: 5.1
 Tested up to: 5.2
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 Donate link: https://kenzap.com/wordpress-plugin-donation-page/
 Requires PHP: 5.6
 License: GPL2+
@@ -94,3 +94,8 @@ Update: More settings available under Background and Container panes
 
 = v1.1.1 =
 Update: vulnerability update
+
+= v1.2.0 =
+New: blocks 4 and 5 added
+New: Features List 1 support icon color change on hover
+New: Features List 1 buttons option added
